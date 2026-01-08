@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useBooking } from '../context/BookingContext';
-import { useNavigate } from 'react-router-dom';
+import PhoneInput from '../components/PhoneInput';
 
 const Summary: React.FC = () => {
   const { state, setContactDetails, totalPrice } = useBooking();
-  const navigate = useNavigate();
   
   const [formData, setFormData] = useState(state.contactDetails);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -58,7 +57,9 @@ const Summary: React.FC = () => {
         <form id="booking-form" onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                First Name <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="firstName"
@@ -71,7 +72,9 @@ const Summary: React.FC = () => {
               {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Last Name <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="lastName"
@@ -87,7 +90,9 @@ const Summary: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email Address <span className="text-red-500">*</span>
+              </label>
               <input
                 type="email"
                 name="email"
@@ -99,20 +104,20 @@ const Summary: React.FC = () => {
               />
               {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="+41 79 123 45 67"
-                className={`w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-purple-500 transition-all ${
-                  errors.phone ? 'border-red-500' : 'border-gray-300'
-                }`}
-              />
-              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
-            </div>
+            <PhoneInput
+              value={formData.phone}
+              onChange={(value) => {
+                setFormData(prev => ({ ...prev, phone: value }));
+                if (errors.phone) {
+                  setErrors(prev => {
+                    const newErrors = { ...prev };
+                    delete newErrors.phone;
+                    return newErrors;
+                  });
+                }
+              }}
+              error={errors.phone}
+            />
           </div>
 
           <div>
@@ -130,17 +135,6 @@ const Summary: React.FC = () => {
             </div>
           </div>
         </form>
-      </div>
-
-      {/* Desktop Complete Button */}
-      <div className="hidden md:flex justify-end mt-8">
-        <button
-          type="submit"
-          form="booking-form"
-          className="px-8 py-3 rounded-lg font-bold text-white bg-purple-600 hover:bg-purple-700 shadow-lg hover:shadow-purple-200 transform hover:-translate-y-0.5 transition-all"
-        >
-          Complete Reservation
-        </button>
       </div>
     </div>
   );

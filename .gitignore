@@ -35,3 +35,6 @@ __pycache__/
 
 # Misc
 .tmp/
+
+# Cloud files
+.claud/

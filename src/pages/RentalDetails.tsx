@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../context/BookingContext';
 import { locations, colors } from '../data/mockData';
 import DateTimePicker from '../components/DateTimePicker';
@@ -7,7 +6,6 @@ import { MapPin, Palette, Settings } from 'lucide-react';
 
 const RentalDetails: React.FC = () => {
   const { state, setLocation, setDates, setTransmission, setColor } = useBooking();
-  const navigate = useNavigate();
 
   // Local state for inputs to handle date/time splitting
   const [pickupDateStr, setPickupDateStr] = useState('');
@@ -35,8 +33,6 @@ const RentalDetails: React.FC = () => {
   }, [pickupDateStr, pickupTimeStr, returnDateStr, returnTimeStr]);
 
   const today = new Date().toISOString().split('T')[0];
-
-  const isValid = state.pickupLocation && state.pickupDate && state.returnDate && state.returnDate > state.pickupDate;
 
   return (
     <div className="animate-fade-in space-y-8">
@@ -127,21 +123,6 @@ const RentalDetails: React.FC = () => {
             ))}
           </select>
         </div>
-      </div>
-
-      {/* Desktop Next Button */}
-      <div className="hidden md:flex justify-end mt-8">
-        <button
-          onClick={() => navigate('/extras')}
-          disabled={!isValid}
-          className={`px-8 py-3 rounded-lg font-bold text-white transition-all ${
-            !isValid
-              ? 'bg-gray-300 cursor-not-allowed'
-              : 'bg-purple-600 hover:bg-purple-700 shadow-lg hover:shadow-purple-200 transform hover:-translate-y-0.5'
-          }`}
-        >
-          Continue to Extras
-        </button>
       </div>
     </div>
   );

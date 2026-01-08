@@ -1,20 +1,37 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../context/BookingContext';
 import { insuranceOptions, extraOptions } from '../data/mockData';
 import InsuranceCard from '../components/InsuranceCard';
 import ExtraCheckbox from '../components/ExtraCheckbox';
+import PriceRangeSlider from '../components/PriceRangeSlider';
+import PrioritySelector from '../components/PrioritySelector';
 
 const ExtrasInsurance: React.FC = () => {
-  const { state, setInsurance, toggleExtra } = useBooking();
-  const navigate = useNavigate();
+  const { state, setInsurance, toggleExtra, setPriceRange, setPriority } = useBooking();
 
   return (
     <div className="animate-fade-in space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Protection & Extras</h1>
-        <p className="text-gray-600">Travel with peace of mind and comfort.</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Budget & Preferences</h1>
+        <p className="text-gray-600">Customize your rental experience.</p>
       </div>
+
+      {/* Budget & Priority Section */}
+      <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
+        <h2 className="text-xl font-bold text-gray-900">Budget & Prioritäten</h2>
+
+        <PriceRangeSlider
+          value={state.priceRange}
+          onChange={setPriceRange}
+          min={40}
+          max={120}
+        />
+
+        <PrioritySelector
+          value={state.priority}
+          onChange={setPriority}
+        />
+      </section>
 
       {/* Insurance Section */}
       <section>
@@ -47,16 +64,6 @@ const ExtrasInsurance: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* Desktop Next Button */}
-      <div className="hidden md:flex justify-end mt-8">
-        <button
-          onClick={() => navigate('/summary')}
-          className="px-8 py-3 rounded-lg font-bold text-white bg-purple-600 hover:bg-purple-700 shadow-lg hover:shadow-purple-200 transform hover:-translate-y-0.5 transition-all"
-        >
-          Continue to Summary
-        </button>
-      </div>
     </div>
   );
 };

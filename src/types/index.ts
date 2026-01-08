@@ -28,6 +28,8 @@ export interface ExtraOption {
   description?: string;
 }
 
+export type Priority = 'Preis' | 'Komfort' | 'Nachhaltigkeit' | 'Design';
+
 export interface BookingState {
   selectedVehicle: Vehicle | null;
   pickupLocation: string;
@@ -35,6 +37,8 @@ export interface BookingState {
   returnDate: Date | null;
   transmissionPreference: 'Manual' | 'Automatic' | null; // User preference, might differ from vehicle actual
   colorPreference: string | null;
+  priceRange: [number, number]; // CHF 40-120 per day
+  priority: Priority | null; // User's main priority
   selectedInsurance: string | null; // ID of selected insurance
   selectedExtras: string[]; // IDs of selected extras
   contactDetails: {

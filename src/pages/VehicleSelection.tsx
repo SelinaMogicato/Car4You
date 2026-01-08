@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../context/BookingContext';
 import { vehicles } from '../data/mockData';
 import { VehicleCategory } from '../types';
@@ -9,12 +8,17 @@ const categories: VehicleCategory[] = ['City', 'Family', 'SUV', 'Sport', 'E-Car'
 
 const VehicleSelection: React.FC = () => {
   const { state, setVehicle } = useBooking();
-  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState<VehicleCategory | 'All'>('All');
 
-  const filteredVehicles = activeCategory === 'All' 
-    ? vehicles 
+  // Filter by category
+  const categoryFilteredVehicles = activeCategory === 'All'
+    ? vehicles
     : vehicles.filter(v => v.category === activeCategory);
+
+  // Filter by price range
+  const filteredVehicles = categoryFilteredVehicles.filter(
+    v => v.pricePerDay >= state.priceRange[0] && v.pricePerDay <= state.priceRange[1]
+  );
 
   const handleSelect = (vehicle: any) => {
     setVehicle(vehicle);
@@ -35,8 +39,8 @@ const VehicleSelection: React.FC = () => {
         <button
           onClick={() => setActiveCategory('All')}
           className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
-            activeCategory === 'All' 
-              ? 'bg-purple-600 text-white' 
+            activeCategory === 'All'
+              ? 'bg-purple-600 text-white'
               : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
           }`}
         >
@@ -47,8 +51,8 @@ const VehicleSelection: React.FC = () => {
             key={cat}
             onClick={() => setActiveCategory(cat)}
             className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
-              activeCategory === cat 
-                ? 'bg-purple-600 text-white' 
+              activeCategory === cat
+                ? 'bg-purple-600 text-white'
                 : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
             }`}
           >
@@ -56,6 +60,18 @@ const VehicleSelection: React.FC = () => {
           </button>
         ))}
       </div>
+
+      {/* Price Filter Info */}
+      {(state.priceRange[0] !== 40 || state.priceRange[1] !== 120) && (
+        <div className="mb-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+          <p className="text-sm text-purple-700">
+            Showing vehicles in price range: <span className="font-bold">CHF {state.priceRange[0]} - CHF {state.priceRange[1]}</span> per day
+            {filteredVehicles.length === 0 && (
+              <span className="text-red-600 ml-2">• No vehicles found in this range</span>
+            )}
+          </p>
+        </div>
+      )}
 
       {/* Vehicle Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -67,21 +83,6 @@ const VehicleSelection: React.FC = () => {
             isSelected={state.selectedVehicle?.id === vehicle.id}
           />
         ))}
-      </div>
-
-      {/* Desktop Next Button */}
-      <div className="hidden md:flex justify-end mt-8">
-        <button
-          onClick={() => navigate('/details')}
-          disabled={!state.selectedVehicle}
-          className={`px-8 py-3 rounded-lg font-bold text-white transition-all ${
-            !state.selectedVehicle
-              ? 'bg-gray-300 cursor-not-allowed'
-              : 'bg-purple-600 hover:bg-purple-700 shadow-lg hover:shadow-purple-200 transform hover:-translate-y-0.5'
-          }`}
-        >
-          Continue to Details
-        </button>
       </div>
     </div>
   );

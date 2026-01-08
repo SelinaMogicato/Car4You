@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { BookingState, Vehicle } from '../types';
-import { vehicles, insuranceOptions, extraOptions } from '../data/mockData';
+import { BookingState, Vehicle, Priority } from '../types';
+import { insuranceOptions, extraOptions } from '../data/mockData';
 
 interface BookingContextType {
   state: BookingState;
@@ -9,6 +9,8 @@ interface BookingContextType {
   setLocation: (location: string) => void;
   setTransmission: (transmission: 'Manual' | 'Automatic' | null) => void;
   setColor: (color: string) => void;
+  setPriceRange: (range: [number, number]) => void;
+  setPriority: (priority: Priority) => void;
   setInsurance: (insuranceId: string) => void;
   toggleExtra: (extraId: string) => void;
   setContactDetails: (details: BookingState['contactDetails']) => void;
@@ -25,6 +27,8 @@ const initialState: BookingState = {
   returnDate: null,
   transmissionPreference: null,
   colorPreference: 'No Preference',
+  priceRange: [40, 120],
+  priority: null,
   selectedInsurance: null,
   selectedExtras: [],
   contactDetails: {
@@ -57,6 +61,14 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const setColor = (color: string) => {
     setState(prev => ({ ...prev, colorPreference: color }));
+  };
+
+  const setPriceRange = (range: [number, number]) => {
+    setState(prev => ({ ...prev, priceRange: range }));
+  };
+
+  const setPriority = (priority: Priority) => {
+    setState(prev => ({ ...prev, priority: priority }));
   };
 
   const setInsurance = (insuranceId: string) => {
@@ -122,6 +134,8 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
       setLocation,
       setTransmission,
       setColor,
+      setPriceRange,
+      setPriority,
       setInsurance,
       toggleExtra,
       setContactDetails,

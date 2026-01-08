@@ -1,22 +1,29 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Check } from 'lucide-react';
 
 const steps = [
   { path: '/', label: 'Vehicle' },
   { path: '/details', label: 'Details' },
-  { path: '/extras', label: 'Extras' },
+  { path: '/extras', label: 'Preferences' },
   { path: '/summary', label: 'Summary' }
 ];
 
-const ProgressStepper: React.FC = () => {
+interface ProgressStepperProps {
+  isHeaderVisible: boolean;
+}
+
+const ProgressStepper: React.FC<ProgressStepperProps> = ({ isHeaderVisible }) => {
   const location = useLocation();
-  const navigate = useNavigate();
-  
+
   const currentStepIndex = steps.findIndex(step => step.path === location.pathname);
 
   return (
-    <div className="w-full py-6 bg-white border-b border-gray-200 mb-8">
+    <div
+      className={`w-full py-6 bg-white border-b border-gray-200 sticky z-30 shadow-sm transition-all duration-300 ${
+        isHeaderVisible ? 'top-16' : 'top-0'
+      }`}
+    >
       <div className="max-w-4xl mx-auto px-4">
         <div className="relative flex items-center justify-between">
           {/* Connecting Line */}
