@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { BookingProvider } from './context/BookingContext';
-import VehicleSelection from './pages/VehicleSelection';
 import RentalDetails from './pages/RentalDetails';
+import Preferences from './pages/Preferences';
+import VehicleSelection from './pages/VehicleSelection';
 import ExtrasInsurance from './pages/ExtrasInsurance';
 import Summary from './pages/Summary';
 import ProgressStepper from './components/ProgressStepper';
@@ -52,7 +53,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
       <ProgressStepper isHeaderVisible={isHeaderVisible} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content Area */}
           <div className="lg:col-span-2">
@@ -77,8 +78,9 @@ function App() {
       <Router>
         <Layout>
           <Routes>
-            <Route path="/" element={<VehicleSelection />} />
-            <Route path="/details" element={<RentalDetails />} />
+            <Route path="/" element={<RentalDetails />} />
+            <Route path="/preferences" element={<Preferences />} />
+            <Route path="/vehicles" element={<VehicleSelection />} />
             <Route path="/extras" element={<ExtrasInsurance />} />
             <Route path="/summary" element={<Summary />} />
           </Routes>

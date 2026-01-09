@@ -3,35 +3,16 @@ import { useBooking } from '../context/BookingContext';
 import { insuranceOptions, extraOptions } from '../data/mockData';
 import InsuranceCard from '../components/InsuranceCard';
 import ExtraCheckbox from '../components/ExtraCheckbox';
-import PriceRangeSlider from '../components/PriceRangeSlider';
-import PrioritySelector from '../components/PrioritySelector';
 
 const ExtrasInsurance: React.FC = () => {
-  const { state, setInsurance, toggleExtra, setPriceRange, setPriority } = useBooking();
+  const { state, setInsurance, toggleExtra } = useBooking();
 
   return (
     <div className="animate-fade-in space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Budget & Preferences</h1>
-        <p className="text-gray-600">Customize your rental experience.</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Protection & Extras</h1>
+        <p className="text-gray-600">Protect your journey and add extras for comfort.</p>
       </div>
-
-      {/* Budget & Priority Section */}
-      <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
-        <h2 className="text-xl font-bold text-gray-900">Budget & Prioritäten</h2>
-
-        <PriceRangeSlider
-          value={state.priceRange}
-          onChange={setPriceRange}
-          min={40}
-          max={120}
-        />
-
-        <PrioritySelector
-          value={state.priority}
-          onChange={setPriority}
-        />
-      </section>
 
       {/* Insurance Section */}
       <section>

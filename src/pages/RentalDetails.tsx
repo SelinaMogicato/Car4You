@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useBooking } from '../context/BookingContext';
-import { locations, colors } from '../data/mockData';
+import { locations } from '../data/mockData';
 import DateTimePicker from '../components/DateTimePicker';
-import { MapPin, Palette, Settings } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 
 const RentalDetails: React.FC = () => {
-  const { state, setLocation, setDates, setTransmission, setColor } = useBooking();
+  const { state, setLocation, setDates } = useBooking();
 
   // Local state for inputs to handle date/time splitting
   const [pickupDateStr, setPickupDateStr] = useState('');
@@ -78,50 +78,6 @@ const RentalDetails: React.FC = () => {
             onTimeChange={(e) => setReturnTimeStr(e.target.value)}
             minDate={pickupDateStr || today}
           />
-        </div>
-      </div>
-
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
-        <h2 className="text-xl font-bold text-gray-900">Preferences</h2>
-        
-        {/* Transmission */}
-        <div>
-          <label className="flex items-center gap-2 font-medium text-gray-700 mb-3">
-            <Settings size={20} className="text-purple-600" />
-            Transmission Preference
-          </label>
-          <div className="flex gap-4">
-            {['Manual', 'Automatic'].map((type) => (
-              <label key={type} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="transmission"
-                  value={type}
-                  checked={state.transmissionPreference === type}
-                  onChange={() => setTransmission(type as 'Manual' | 'Automatic')}
-                  className="w-4 h-4 text-purple-600 focus:ring-purple-500 border-gray-300"
-                />
-                <span>{type}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* Color */}
-        <div>
-          <label className="flex items-center gap-2 font-medium text-gray-700 mb-3">
-            <Palette size={20} className="text-purple-600" />
-            Vehicle Color (Optional)
-          </label>
-          <select
-            value={state.colorPreference || 'No Preference'}
-            onChange={(e) => setColor(e.target.value)}
-            className="w-full md:w-1/2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none bg-white"
-          >
-            {colors.map(color => (
-              <option key={color} value={color}>{color}</option>
-            ))}
-          </select>
         </div>
       </div>
     </div>

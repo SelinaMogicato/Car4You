@@ -5,9 +5,10 @@ import { ChevronUp, ChevronDown, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const steps = [
-  { path: '/', label: 'Vehicle' },
-  { path: '/details', label: 'Details' },
-  { path: '/extras', label: 'Preferences' },
+  { path: '/', label: 'Location' },
+  { path: '/preferences', label: 'Preferences' },
+  { path: '/vehicles', label: 'Vehicle' },
+  { path: '/extras', label: 'Extras' },
   { path: '/summary', label: 'Summary' }
 ];
 
@@ -45,6 +46,24 @@ const PriceSummary: React.FC<PriceSummaryProps> = ({ isHeaderVisible }) => {
     }
   };
 
+  // Check if current step requirements are met
+  const isStepValid = () => {
+    switch (currentStepIndex) {
+      case 0: // Location step
+        return state.pickupLocation && state.pickupDate && state.returnDate;
+      case 1: // Preferences step
+        return state.priceRange.length === 2; // Price range is always valid (has default)
+      case 2: // Vehicle step
+        return !!state.selectedVehicle;
+      case 3: // Extras step
+        return !!state.selectedInsurance; // Insurance is required
+      case 4: // Summary step
+        return true; // Always valid on summary
+      default:
+        return false;
+    }
+  };
+
   // Determine button text and action based on current step
   const getNextButtonConfig = () => {
     if (currentStepIndex === steps.length - 1) {
@@ -59,11 +78,128 @@ const PriceSummary: React.FC<PriceSummaryProps> = ({ isHeaderVisible }) => {
 
   const nextButtonConfig = getNextButtonConfig();
 
+  // Don't show price summary until location and dates are selected (after step 0)
+  if (currentStepIndex === 0) {
+    // Only show navigation buttons on Location page after form is filled
+    const isLocationComplete = state.pickupLocation && state.pickupDate && state.returnDate;
+
+    if (!isLocationComplete) {
+      return null; // Don't show anything until location is filled
+    }
+
+    return (
+      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky ${stickyTop} transition-all duration-300`}>
+        <div className="space-y-4">
+          <h3 className="font-bold text-gray-900 text-center">Ready to continue?</h3>
+          <button
+            onClick={nextButtonConfig.onClick}
+            className="w-full px-4 py-3 rounded-lg font-bold text-white bg-purple-600 hover:bg-purple-700 shadow-lg hover:shadow-purple-200 transition-all flex items-center justify-center gap-2"
+          >
+            {nextButtonConfig.text}
+            <ArrowRight size={18} />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // For Preferences step (step 1), show price range info
+  if (currentStepIndex === 1) {
+    return (
+      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky ${stickyTop} transition-all duration-300`}>
+        <h3 className="font-bold text-gray-900 mb-4">Your Preferences</h3>
+
+        <div className="space-y-4">
+          {/* Rental Duration */}
+          {days > 0 && (
+            <div className="pb-4 border-b border-gray-100">
+              <div className="text-sm text-gray-600 mb-1">Rental Duration:</div>
+              <div className="text-lg font-bold text-purple-700">
+                {days} {days === 1 ? 'day' : 'days'}
+              </div>
+            </div>
+          )}
+
+          {/* Price Range */}
+          <div className="pb-4 border-b border-gray-100">
+            <div className="text-sm text-gray-600 mb-1">Price Range per Day:</div>
+            <div className="text-lg font-bold text-purple-700">
+              CHF {state.priceRange[0]} - CHF {state.priceRange[1]}
+            </div>
+            {days > 0 && (
+              <div className="text-xs text-gray-500 mt-1">
+                Total range: CHF {state.priceRange[0] * days} - CHF {state.priceRange[1] * days}
+              </div>
+            )}
+          </div>
+
+          {/* Priority */}
+          {state.priority && (
+            <div className="pb-4">
+              <div className="text-sm text-gray-600 mb-1">Priority:</div>
+              <div className="text-lg font-bold text-purple-700">{state.priority}</div>
+            </div>
+          )}
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="flex gap-3 pt-4 border-t border-gray-100">
+          {canGoBack && (
+            <button
+              onClick={handleBack}
+              className="flex-1 px-4 py-3 rounded-lg font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+            >
+              <ArrowLeft size={18} />
+              Back
+            </button>
+          )}
+          <button
+            onClick={nextButtonConfig.onClick}
+            disabled={!isStepValid()}
+            className={`${canGoBack ? 'flex-1' : 'w-full'} px-4 py-3 rounded-lg font-bold text-white transition-all flex items-center justify-center gap-2 ${
+              !isStepValid()
+                ? 'bg-gray-300 cursor-not-allowed'
+                : 'bg-purple-600 hover:bg-purple-700 shadow-lg hover:shadow-purple-200'
+            }`}
+          >
+            {nextButtonConfig.text}
+            {canGoForward && <ArrowRight size={18} />}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // For other steps, show message if no vehicle selected yet
   if (!state.selectedVehicle) {
     return (
       <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky ${stickyTop} transition-all duration-300`}>
         <div className="text-center text-gray-500 py-8">
           <p>Select a vehicle to see the price summary</p>
+        </div>
+        {/* Navigation Buttons */}
+        <div className="flex gap-3 pt-4">
+          {canGoBack && (
+            <button
+              onClick={handleBack}
+              className="flex-1 px-4 py-3 rounded-lg font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+            >
+              <ArrowLeft size={18} />
+              Back
+            </button>
+          )}
+          <button
+            onClick={nextButtonConfig.onClick}
+            disabled={!isStepValid()}
+            className={`${canGoBack ? 'flex-1' : 'w-full'} px-4 py-3 rounded-lg font-bold text-white transition-all flex items-center justify-center gap-2 ${
+              !isStepValid()
+                ? 'bg-gray-300 cursor-not-allowed'
+                : 'bg-purple-600 hover:bg-purple-700 shadow-lg hover:shadow-purple-200'
+            }`}
+          >
+            {nextButtonConfig.text}
+            {canGoForward && <ArrowRight size={18} />}
+          </button>
         </div>
       </div>
     );
@@ -147,9 +283,9 @@ const PriceSummary: React.FC<PriceSummaryProps> = ({ isHeaderVisible }) => {
           )}
           <button
             onClick={nextButtonConfig.onClick}
-            disabled={currentStepIndex === 0 && !state.selectedVehicle}
+            disabled={!isStepValid()}
             className={`${canGoBack ? 'flex-1' : 'w-full'} px-4 py-3 rounded-lg font-bold text-white transition-all flex items-center justify-center gap-2 ${
-              currentStepIndex === 0 && !state.selectedVehicle
+              !isStepValid()
                 ? 'bg-gray-300 cursor-not-allowed'
                 : 'bg-purple-600 hover:bg-purple-700 shadow-lg hover:shadow-purple-200'
             }`}

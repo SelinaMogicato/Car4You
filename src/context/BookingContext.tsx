@@ -29,7 +29,7 @@ const initialState: BookingState = {
   colorPreference: 'No Preference',
   priceRange: [40, 120],
   priority: null,
-  selectedInsurance: null,
+  selectedInsurance: 'basic', // Basic insurance is included by default
   selectedExtras: [],
   contactDetails: {
     firstName: '',
@@ -95,31 +95,37 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [days, setDays] = useState(0);
 
   useEffect(() => {
-    if (state.pickupDate && state.returnDate && state.selectedVehicle) {
+    // Calculate days first - this should work even without a vehicle
+    if (state.pickupDate && state.returnDate) {
       const diffTime = Math.abs(state.returnDate.getTime() - state.pickupDate.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       const rentalDays = diffDays > 0 ? diffDays : 1; // Minimum 1 day
       setDays(rentalDays);
 
-      let price = state.selectedVehicle.pricePerDay * rentalDays;
+      // Only calculate price if vehicle is selected
+      if (state.selectedVehicle) {
+        let price = state.selectedVehicle.pricePerDay * rentalDays;
 
-      // Add insurance
-      if (state.selectedInsurance) {
-        const insurance = insuranceOptions.find(i => i.id === state.selectedInsurance);
-        if (insurance) {
-          price += insurance.pricePerDay * rentalDays;
+        // Add insurance
+        if (state.selectedInsurance) {
+          const insurance = insuranceOptions.find(i => i.id === state.selectedInsurance);
+          if (insurance) {
+            price += insurance.pricePerDay * rentalDays;
+          }
         }
+
+        // Add extras
+        state.selectedExtras.forEach(extraId => {
+          const extra = extraOptions.find(e => e.id === extraId);
+          if (extra && extra.pricePerDay) {
+            price += extra.pricePerDay * rentalDays;
+          }
+        });
+
+        setTotalPrice(price);
+      } else {
+        setTotalPrice(0);
       }
-
-      // Add extras
-      state.selectedExtras.forEach(extraId => {
-        const extra = extraOptions.find(e => e.id === extraId);
-        if (extra && extra.pricePerDay) {
-          price += extra.pricePerDay * rentalDays;
-        }
-      });
-
-      setTotalPrice(price);
     } else {
       setTotalPrice(0);
       setDays(0);

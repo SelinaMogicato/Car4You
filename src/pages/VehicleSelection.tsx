@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useBooking } from '../context/BookingContext';
-import { vehicles } from '../data/mockData';
+import { getVehiclesForLocation } from '../data/mockData';
 import { VehicleCategory } from '../types';
 import VehicleCard from '../components/VehicleCard';
 
@@ -10,10 +10,13 @@ const VehicleSelection: React.FC = () => {
   const { state, setVehicle } = useBooking();
   const [activeCategory, setActiveCategory] = useState<VehicleCategory | 'All'>('All');
 
+  // Get vehicles available at selected location
+  const locationVehicles = getVehiclesForLocation(state.pickupLocation);
+
   // Filter by category
   const categoryFilteredVehicles = activeCategory === 'All'
-    ? vehicles
-    : vehicles.filter(v => v.category === activeCategory);
+    ? locationVehicles
+    : locationVehicles.filter(v => v.category === activeCategory);
 
   // Filter by price range
   const filteredVehicles = categoryFilteredVehicles.filter(
@@ -31,7 +34,9 @@ const VehicleSelection: React.FC = () => {
     <div className="animate-fade-in">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Select Your Vehicle</h1>
-        <p className="text-gray-600">Choose the perfect car for your journey.</p>
+        <p className="text-gray-600">
+          Available vehicles at <span className="font-semibold text-purple-700">{state.pickupLocation}</span>
+        </p>
       </div>
 
       {/* Category Filter */}

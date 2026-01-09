@@ -187,3 +187,28 @@ export const colors = [
   'Blue',
   'Red'
 ];
+
+// Get available vehicles for a specific location
+// Each location has a random subset of 5-7 vehicles
+export const getVehiclesForLocation = (location: string): Vehicle[] => {
+  if (!location) return vehicles;
+
+  // Create a deterministic "random" based on location name
+  // This ensures the same vehicles are shown for the same location every time
+  const seed = location.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const random = (index: number) => {
+    const x = Math.sin(seed + index) * 10000;
+    return x - Math.floor(x);
+  };
+
+  // Shuffle vehicles deterministically
+  const shuffled = [...vehicles].sort((a, b) => {
+    const aVal = random(parseInt(a.id));
+    const bVal = random(parseInt(b.id));
+    return aVal - bVal;
+  });
+
+  // Return 5-7 vehicles (based on location seed)
+  const count = 5 + Math.floor(random(100) * 3); // 5, 6, or 7
+  return shuffled.slice(0, count);
+};

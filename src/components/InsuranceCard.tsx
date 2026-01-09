@@ -48,12 +48,6 @@ const InsuranceCard: React.FC<InsuranceCardProps> = ({ option, isSelected, onSel
           {option.description}
         </p>
       </div>
-
-      <div className={`absolute top-5 right-5 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-        isSelected ? 'border-purple-600' : 'border-gray-300'
-      }`}>
-        {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-purple-600" />}
-      </div>
     </div>
   );
 };

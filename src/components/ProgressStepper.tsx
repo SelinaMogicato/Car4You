@@ -3,9 +3,10 @@ import { useLocation } from 'react-router-dom';
 import { Check } from 'lucide-react';
 
 const steps = [
-  { path: '/', label: 'Vehicle' },
-  { path: '/details', label: 'Details' },
-  { path: '/extras', label: 'Preferences' },
+  { path: '/', label: 'Location' },
+  { path: '/preferences', label: 'Preferences' },
+  { path: '/vehicles', label: 'Vehicle' },
+  { path: '/extras', label: 'Extras' },
   { path: '/summary', label: 'Summary' }
 ];
 
@@ -28,7 +29,7 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ isHeaderVisible }) =>
         <div className="relative flex items-center justify-between">
           {/* Connecting Line */}
           <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-gray-100 -z-10" />
-          <div 
+          <div
             className="absolute left-0 top-1/2 transform -translate-y-1/2 h-1 bg-purple-200 -z-10 transition-all duration-500"
             style={{ width: `${(currentStepIndex / (steps.length - 1)) * 100}%` }}
           />
@@ -36,15 +37,15 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ isHeaderVisible }) =>
           {steps.map((step, index) => {
             const isCompleted = index < currentStepIndex;
             const isCurrent = index === currentStepIndex;
-            
+
             return (
               <div key={step.path} className="flex flex-col items-center">
-                <div 
+                <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300 bg-white ${
-                    isCompleted 
-                      ? 'border-purple-600 bg-purple-600 text-white' 
-                      : isCurrent 
-                        ? 'border-purple-600 text-purple-600' 
+                    isCompleted
+                      ? 'border-purple-600 bg-purple-600 text-white'
+                      : isCurrent
+                        ? 'border-purple-600 text-purple-600'
                         : 'border-gray-300 text-gray-300'
                   }`}
                 >

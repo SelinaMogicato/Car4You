@@ -37,5 +37,5 @@ __pycache__/
 .tmp/
 
 # Cloud files
-.claud/
 .claude/
+settings.local.json
