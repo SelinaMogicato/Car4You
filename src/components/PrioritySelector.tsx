@@ -9,28 +9,28 @@ interface PrioritySelectorProps {
 
 const priorities: { value: Priority; label: string; icon: React.ReactNode; description: string }[] = [
   {
-    value: 'Preis',
-    label: 'Preis',
+    value: 'Price',
+    label: 'Price',
     icon: <DollarSign className="w-5 h-5" />,
-    description: 'Bestes Preis-Leistungs-Verhältnis'
+    description: 'Best value for money'
   },
   {
-    value: 'Komfort',
-    label: 'Komfort',
+    value: 'Comfort',
+    label: 'Comfort',
     icon: <Sparkles className="w-5 h-5" />,
-    description: 'Höchster Komfort und Ausstattung'
+    description: 'Highest comfort and amenities'
   },
   {
-    value: 'Nachhaltigkeit',
-    label: 'Nachhaltigkeit',
+    value: 'Sustainability',
+    label: 'Sustainability',
     icon: <Leaf className="w-5 h-5" />,
-    description: 'Umweltfreundliche Fahrzeuge'
+    description: 'Eco-friendly vehicles'
   },
   {
     value: 'Design',
     label: 'Design',
     icon: <Palette className="w-5 h-5" />,
-    description: 'Stilvolles und modernes Erscheinungsbild'
+    description: 'Stylish and modern appearance'
   }
 ];
 
@@ -38,7 +38,7 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ value, onChange }) 
   return (
     <div className="space-y-3">
       <label className="block text-sm font-medium text-gray-700">
-        Wichtigste Priorität
+        Main Priority
       </label>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {priorities.map((priority) => (

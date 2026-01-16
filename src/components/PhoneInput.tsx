@@ -33,7 +33,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({ value, onChange, error }) => {
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Telefonnummer <span className="text-red-500">*</span>
+        Phone Number <span className="text-red-500">*</span>
       </label>
       <div className="flex gap-2">
         <select
@@ -59,7 +59,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({ value, onChange, error }) => {
       </div>
       {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       <p className="text-xs text-gray-500 mt-1">
-        Beispiel: {selectedCode} 79 123 45 67
+        Example: {selectedCode} 79 123 45 67
       </p>
     </div>
   );

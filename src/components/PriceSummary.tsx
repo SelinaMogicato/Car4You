@@ -50,7 +50,7 @@ const PriceSummary: React.FC<PriceSummaryProps> = ({ isHeaderVisible }) => {
   const isStepValid = () => {
     switch (currentStepIndex) {
       case 0: // Location step
-        return state.pickupLocation && state.pickupDate && state.returnDate;
+        return state.pickupLocation && state.returnLocation && state.pickupDate && state.returnDate;
       case 1: // Preferences step
         return state.priceRange.length === 2; // Price range is always valid (has default)
       case 2: // Vehicle step
@@ -81,7 +81,7 @@ const PriceSummary: React.FC<PriceSummaryProps> = ({ isHeaderVisible }) => {
   // Don't show price summary until location and dates are selected (after step 0)
   if (currentStepIndex === 0) {
     // Only show navigation buttons on Location page after form is filled
-    const isLocationComplete = state.pickupLocation && state.pickupDate && state.returnDate;
+    const isLocationComplete = state.pickupLocation && state.returnLocation && state.pickupDate && state.returnDate;
 
     if (!isLocationComplete) {
       return null; // Don't show anything until location is filled

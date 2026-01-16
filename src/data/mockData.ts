@@ -164,7 +164,7 @@ export const extraOptions: ExtraOption[] = [
   },
   {
     id: 'full_insurance',
-    name: 'Vollkasko',
+    name: 'Full Coverage',
     pricePerDay: 25,
     description: 'Comprehensive insurance coverage'
   }

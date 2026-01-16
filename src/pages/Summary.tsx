@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../context/BookingContext';
 import PhoneInput from '../components/PhoneInput';
 
 const Summary: React.FC = () => {
-  const { state, setContactDetails, totalPrice } = useBooking();
+  const navigate = useNavigate();
+  const { state, setContactDetails } = useBooking();
   
   const [formData, setFormData] = useState(state.contactDetails);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -39,8 +41,7 @@ const Summary: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       setContactDetails(formData);
-      alert(`Booking Confirmed! Total: CHF ${totalPrice}\nThank you for choosing Car4You.`);
-      // Reset or redirect
+      navigate('/confirmation');
     }
   };
 

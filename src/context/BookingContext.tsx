@@ -6,7 +6,8 @@ interface BookingContextType {
   state: BookingState;
   setVehicle: (vehicle: Vehicle) => void;
   setDates: (pickup: Date, returnDate: Date) => void;
-  setLocation: (location: string) => void;
+  setPickupLocation: (location: string) => void;
+  setReturnLocation: (location: string) => void;
   setTransmission: (transmission: 'Manual' | 'Automatic' | null) => void;
   setColor: (color: string) => void;
   setPriceRange: (range: [number, number]) => void;
@@ -14,6 +15,7 @@ interface BookingContextType {
   setInsurance: (insuranceId: string) => void;
   toggleExtra: (extraId: string) => void;
   setContactDetails: (details: BookingState['contactDetails']) => void;
+  resetBooking: () => void;
   totalPrice: number;
   days: number;
 }
@@ -23,11 +25,12 @@ const BookingContext = createContext<BookingContextType | undefined>(undefined);
 const initialState: BookingState = {
   selectedVehicle: null,
   pickupLocation: '',
+  returnLocation: '',
   pickupDate: null,
   returnDate: null,
   transmissionPreference: null,
   colorPreference: 'No Preference',
-  priceRange: [40, 120],
+  priceRange: [40, 200],
   priority: null,
   selectedInsurance: 'basic', // Basic insurance is included by default
   selectedExtras: [],
@@ -51,8 +54,12 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
     setState(prev => ({ ...prev, pickupDate: pickup, returnDate: returnDate }));
   };
 
-  const setLocation = (location: string) => {
+  const setPickupLocation = (location: string) => {
     setState(prev => ({ ...prev, pickupLocation: location }));
+  };
+
+  const setReturnLocation = (location: string) => {
+    setState(prev => ({ ...prev, returnLocation: location }));
   };
 
   const setTransmission = (transmission: 'Manual' | 'Automatic' | null) => {
@@ -88,6 +95,10 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const setContactDetails = (details: BookingState['contactDetails']) => {
     setState(prev => ({ ...prev, contactDetails: details }));
+  };
+
+  const resetBooking = () => {
+    setState(initialState);
   };
 
   // Calculate total price
@@ -137,7 +148,8 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
       state,
       setVehicle,
       setDates,
-      setLocation,
+      setPickupLocation,
+      setReturnLocation,
       setTransmission,
       setColor,
       setPriceRange,
@@ -145,6 +157,7 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
       setInsurance,
       toggleExtra,
       setContactDetails,
+      resetBooking,
       totalPrice,
       days
     }}>

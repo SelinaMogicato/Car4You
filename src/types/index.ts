@@ -28,11 +28,12 @@ export interface ExtraOption {
   description?: string;
 }
 
-export type Priority = 'Preis' | 'Komfort' | 'Nachhaltigkeit' | 'Design';
+export type Priority = 'Price' | 'Comfort' | 'Sustainability' | 'Design';
 
 export interface BookingState {
   selectedVehicle: Vehicle | null;
   pickupLocation: string;
+  returnLocation: string;
   pickupDate: Date | null;
   returnDate: Date | null;
   transmissionPreference: 'Manual' | 'Automatic' | null; // User preference, might differ from vehicle actual

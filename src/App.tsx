@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { BookingProvider } from './context/BookingContext';
 import RentalDetails from './pages/RentalDetails';
 import Preferences from './pages/Preferences';
 import VehicleSelection from './pages/VehicleSelection';
 import ExtrasInsurance from './pages/ExtrasInsurance';
 import Summary from './pages/Summary';
+import Confirmation from './pages/Confirmation';
 import ProgressStepper from './components/ProgressStepper';
 import PriceSummary from './components/PriceSummary';
 import BottomBar from './components/BottomBar';
@@ -72,19 +73,32 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
+const AppRoutes: React.FC = () => {
+  const location = useLocation();
+  const isConfirmationPage = location.pathname === '/confirmation';
+
+  if (isConfirmationPage) {
+    return <Confirmation />;
+  }
+
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<RentalDetails />} />
+        <Route path="/preferences" element={<Preferences />} />
+        <Route path="/vehicles" element={<VehicleSelection />} />
+        <Route path="/extras" element={<ExtrasInsurance />} />
+        <Route path="/summary" element={<Summary />} />
+      </Routes>
+    </Layout>
+  );
+};
+
 function App() {
   return (
     <BookingProvider>
       <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<RentalDetails />} />
-            <Route path="/preferences" element={<Preferences />} />
-            <Route path="/vehicles" element={<VehicleSelection />} />
-            <Route path="/extras" element={<ExtrasInsurance />} />
-            <Route path="/summary" element={<Summary />} />
-          </Routes>
-        </Layout>
+        <AppRoutes />
       </Router>
     </BookingProvider>
   );
