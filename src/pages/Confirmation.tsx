@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../context/BookingContext';
 import { insuranceOptions, extraOptions } from '../data/mockData';
-import { CheckCircle, Car, Calendar, MapPin, Shield, Package, User, RotateCcw, X } from 'lucide-react';
+import { CheckCircle, Car, Calendar, MapPin, Shield, Package, User, RotateCcw } from 'lucide-react';
 
 const Confirmation: React.FC = () => {
   const navigate = useNavigate();
@@ -14,13 +14,6 @@ const Confirmation: React.FC = () => {
   const handleStartAgain = () => {
     resetBooking();
     navigate('/');
-  };
-
-  const handleExitSite = () => {
-    window.close();
-    // Fallback if window.close() doesn't work (some browsers block it)
-    // Show a message or redirect to a blank page
-    window.location.href = 'about:blank';
   };
 
   const formatDate = (date: Date | null) => {
@@ -204,23 +197,14 @@ const Confirmation: React.FC = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <button
-            onClick={handleStartAgain}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 transition-all shadow-lg hover:shadow-purple-200"
-          >
-            <RotateCcw size={20} />
-            New Booking
-          </button>
-          <button
-            onClick={handleExitSite}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-all"
-          >
-            <X size={20} />
-            Close
-          </button>
-        </div>
+        {/* Action Button */}
+        <button
+          onClick={handleStartAgain}
+          className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 transition-all shadow-lg hover:shadow-purple-200"
+        >
+          <RotateCcw size={20} />
+          New Booking
+        </button>
 
         {/* Footer Note */}
         <p className="text-center text-sm text-gray-500 mt-6">
