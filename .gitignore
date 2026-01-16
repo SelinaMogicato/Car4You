@@ -38,4 +38,5 @@ __pycache__/
 
 # Cloud files
 .claude/
+.claude
 settings.local.json
