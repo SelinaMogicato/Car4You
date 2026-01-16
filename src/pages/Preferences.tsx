@@ -19,8 +19,6 @@ const Preferences: React.FC = () => {
         <PriceRangeSlider
           value={state.priceRange}
           onChange={setPriceRange}
-          min={40}
-          max={120}
         />
 
         <PrioritySelector
