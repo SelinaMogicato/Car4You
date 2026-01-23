@@ -30,8 +30,6 @@ const PriceSummary: React.FC<PriceSummaryProps> = ({ isHeaderVisible }) => {
   const canGoForward = currentStepIndex < steps.length - 1;
 
   // Calculate sticky position based on header visibility
-  // Header (64px) + ProgressStepper (~100px) = ~164px when visible
-  // ProgressStepper (~100px) when header hidden
   const stickyTop = isHeaderVisible ? 'top-[164px]' : 'top-[100px]';
 
   const handleBack = () => {
